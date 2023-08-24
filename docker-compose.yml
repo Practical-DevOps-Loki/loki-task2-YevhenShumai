@@ -1,20 +1,26 @@
+# docker-compose.yml
+
 version: "3"
 
 services:
+
   webapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "8080:8080"
     labels:
-      - "webapp=varlogs"  # Label to filter logs for the application
+      - "webapp=varlogs"
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana
     ports:
-      - "9090:3000"  # Grafana's default port
-    depends_on:
-      - webapp  # Make sure the webapp container is up first
+      - "3000:3000"
 
-
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
