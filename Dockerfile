@@ -1,5 +1,3 @@
-# Dockerfile
-
 FROM golang:alpine AS build
 WORKDIR /app
 COPY . .
