@@ -1,26 +1,26 @@
-# docker-compose.yml
-
-version: "3"
+version: '3.9'
 
 services:
-
   webapp:
-    build: .
+    image: webapp
+    build:
+      context: .
     ports:
       - "8080:8080"
-    labels:
-      - "webapp=varlogs"
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
+    volumes:
+      - ./logs:/var/log/webapp
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:8.5.5
     ports:
-      - "3000:3000"
+      - "9090:9090"
+    environment:
+      - GF_LOG_LEVEL=debug
+      - GF_ Loki_URL=http://loki:3100/api/v1/push
 
   loki:
-    image: grafana/loki
+    image: grafana/loki:2.4.0
     ports:
       - "3100:3100"
+    volumes:
+      - ./loki:/var/log/loki
