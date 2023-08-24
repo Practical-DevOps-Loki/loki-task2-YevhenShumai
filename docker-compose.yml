@@ -1,1 +1,20 @@
+version: "3"
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    labels:
+      - "webapp=varlogs"  # Label to filter logs for the application
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "9090:3000"  # Grafana's default port
+    depends_on:
+      - webapp  # Make sure the webapp container is up first
+
 
